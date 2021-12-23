@@ -1,0 +1,40 @@
+html{
+	background-color : black;
+}
+
+.title{
+	color: white;
+	text-align: center;
+}
+
+p.thick{
+	font-weight: bold;
+}
+
+button {
+  background-color: #4CAF50; /* Green */
+  border: 1px solid black;
+  color: white;
+  padding: 4px 4px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.fileButton{
+	background-color: gray;
+}
+
+#manaBlock{
+	color: white;
+	margin: auto;
+	width: 50%;
+	text-align: center;
+	background-color: purple;
+	width: 20%;
+	border: 3px dashed violet;
+	padding: 10px;
+}

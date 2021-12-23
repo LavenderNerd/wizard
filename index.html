@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+	<link href="style.css" rel="stylesheet">
+    <title>Wizard Incremental</title>
+  </head>
+  <script src="main.js" charset="utf-8" type="text/javascript">
+  </script>
+  <body>
+	<div id="fileBlock"> 
+		<button class="fileButton" onclick="save()">Save</button>
+		<button class="fileButton"onclick="load()">Load</button>
+		<button class="fileButton" onclick="hardReset()">HARD RESET</button>
+	</div>
+	
+	<h1 class="title thick">- WIZARD INCREMENTAL -</h1>
+	
+	<div id="manaBlock">
+		<p class="thick" id="manaAmount">0 Current Mana</p>
+		<button id="manaButton" onclick="produceMana()">Produce 1 Mana</button>
+		<div><button id="powerButton" onclick="increasePower()">Increase Mana Power (5 Mana)</button></div>
+		<button id="mageButton" onclick="hireMage()">Hire Mage (100 Mana)</button><a id="mageAmount"> 0 Hired</a>
+	</div>
+	
+  </body>
+</html>
