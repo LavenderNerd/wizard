@@ -13,7 +13,7 @@ function load(){
 	if (savegame !== null) {
 		gameData = savegame;
 	}
-	updateText();
+	updateElements();
 }
 
 function hardReset(){
@@ -23,12 +23,12 @@ function hardReset(){
 		mages: 0
 	}
 	save();
-	updateText();
+	updateElements();
 }
 
 function produceMana(){
 	gameData.mana += gameData.manaIncrease;
-	updateText();
+	updateElements();
 }
 function increasePower(){
 	var cost = (gameData.manaIncrease*5);
@@ -36,7 +36,7 @@ function increasePower(){
 		gameData.mana -= cost;
 		gameData.manaIncrease += 1;
 	}
-	updateText();
+	updateElements();
 }
 
 function hireMage(){
@@ -45,10 +45,10 @@ function hireMage(){
 		gameData.mana -= cost;
 		gameData.mages += 1;
 	}
-	updateText();
+	updateElements();
 }
 
-function updateText(){
+function updateElements(){
 	document.getElementById("manaButton").innerHTML = "Produce " + gameData.manaIncrease + " Mana";
 	document.getElementById("powerButton").innerHTML = "Increase Mana Power ("+(gameData.manaIncrease*5)+" Mana)";
 	document.getElementById("mageAmount").innerHTML = gameData.mages + " Hired";
@@ -58,11 +58,23 @@ function updateText(){
 	} else{
 		document.getElementById("manaAmount").innerHTML = gameData.mana + " Current Mana";
 	}
+	
+	if(gameData.mana >= 5 || gameData.manaIncrease > 1){
+		document.getElementById("manaPower").style.display = "block";
+	} else{
+		document.getElementById("manaPower").style.display = "none";
+	}
+	
+	if(gameData.mana >= 100 || gameData.mages > 0){
+		document.getElementById("mages").style.display = "block";
+	} else{
+		document.getElementById("mages").style.display = "none";
+	}
 }
 
 window.onload = function(){  
 	load();
-	updateText();
+	updateElements();
 }
 
 var mainGameLoop = window.setInterval(function() {
@@ -71,5 +83,5 @@ var mainGameLoop = window.setInterval(function() {
 			produceMana();
 		}
 	}
-	updateText();
+	updateElements();
 }, 1000)

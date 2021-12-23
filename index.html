@@ -12,6 +12,7 @@
 		<button class="fileButton" onclick="save()">Save</button>
 		<button class="fileButton"onclick="load()">Load</button>
 		<button class="fileButton" onclick="hardReset()">HARD RESET</button>
+		<a class="versionNum">Wizard Incremental v0.1</a>
 	</div>
 	
 	<h1 class="title thick">- WIZARD INCREMENTAL -</h1>
@@ -19,8 +20,8 @@
 	<div id="manaBlock">
 		<p class="thick" id="manaAmount">0 Current Mana</p>
 		<button id="manaButton" onclick="produceMana()">Produce 1 Mana</button>
-		<div><button id="powerButton" onclick="increasePower()">Increase Mana Power (5 Mana)</button></div>
-		<button id="mageButton" onclick="hireMage()">Hire Mage (100 Mana)</button><a id="mageAmount"> 0 Hired</a>
+		<div id="manaPower"><button id="powerButton" onclick="increasePower()">Increase Mana Power (5 Mana)</button></div>
+		<div id="mages"><button id="mageButton" onclick="hireMage()">Hire Mage (100 Mana)</button><a id="mageAmount"> 0 Hired</a></div>
 	</div>
 	
   </body>

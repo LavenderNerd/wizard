@@ -7,6 +7,12 @@ html{
 	text-align: center;
 }
 
+.versionNum{
+	color: white;
+	float: right;
+	margin: auto;
+}
+
 p.thick{
 	font-weight: bold;
 }
@@ -31,7 +37,6 @@ button {
 #manaBlock{
 	color: white;
 	margin: auto;
-	width: 50%;
 	text-align: center;
 	background-color: purple;
 	width: 20%;
