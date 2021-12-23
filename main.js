@@ -16,6 +16,16 @@ function load(){
 	updateElements();
 }
 
+function powerCost(){
+	var cost = Math.pow(2,gameData.manaIncrease-1)*5;
+	return cost;
+}
+
+function mageCost(){
+	var cost = (gameData.mages+1)*100;
+	return cost;
+}
+
 function hardReset(){
 	gameData = {
 		mana: 0,
@@ -31,9 +41,8 @@ function produceMana(){
 	updateElements();
 }
 function increasePower(){
-	var cost = (gameData.manaIncrease*5);
-	if(gameData.mana >= cost){
-		gameData.mana -= cost;
+	if(gameData.mana >= powerCost()){
+		gameData.mana -= powerCost();
 		gameData.manaIncrease += 1;
 	}
 	updateElements();
@@ -50,7 +59,7 @@ function hireMage(){
 
 function updateElements(){
 	document.getElementById("manaButton").innerHTML = "Produce " + gameData.manaIncrease + " Mana";
-	document.getElementById("powerButton").innerHTML = "Increase Mana Power ("+(gameData.manaIncrease*5)+" Mana)";
+	document.getElementById("powerButton").innerHTML = "Increase Mana Power ("+powerCost()+" Mana)";
 	document.getElementById("mageAmount").innerHTML = gameData.mages + " Hired";
 	document.getElementById("mageButton").innerHTML = "Hire Mage ("+((gameData.mages+1)*100)+" Mana)";
 	if(gameData.mages > 0){
