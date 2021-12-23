@@ -49,9 +49,8 @@ function increasePower(){
 }
 
 function hireMage(){
-	var cost = (gameData.mages+1)*100;
-	if(gameData.mana >= cost){
-		gameData.mana -= cost;
+	if(gameData.mana >= mageCost()){
+		gameData.mana -= mageCost();
 		gameData.mages += 1;
 	}
 	updateElements();
@@ -61,7 +60,7 @@ function updateElements(){
 	document.getElementById("manaButton").innerHTML = "Produce " + gameData.manaIncrease + " Mana";
 	document.getElementById("powerButton").innerHTML = "Increase Mana Power ("+powerCost()+" Mana)";
 	document.getElementById("mageAmount").innerHTML = gameData.mages + " Hired";
-	document.getElementById("mageButton").innerHTML = "Hire Mage ("+((gameData.mages+1)*100)+" Mana)";
+	document.getElementById("mageButton").innerHTML = "Hire Mage ("+mageCost()+" Mana)";
 	if(gameData.mages > 0){
 		document.getElementById("manaAmount").innerHTML = gameData.mana + " Current Mana ("+(gameData.mages*gameData.manaIncrease)+"/s)";
 	} else{
