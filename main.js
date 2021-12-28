@@ -19,6 +19,7 @@ function initialize(){
 		bloodMulti: 1,
 		bloodUnlocked: false
 	}
+	
 }
 
 function save(){
@@ -51,7 +52,7 @@ function powerCost(){
 	return cost;
 }
 function mageCost(){
-	var cost = (gameData.mages+1)*100;
+	var cost = (gameData.mages+1)*10;
 	return cost;
 }
 function bloodGain(){
