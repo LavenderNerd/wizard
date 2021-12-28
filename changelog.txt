@@ -1,5 +1,6 @@
 v0.2.1
 -Mages cost less now
+-Added goals for next feature
 -Added version history
 
 v0.2 - The Blood Update

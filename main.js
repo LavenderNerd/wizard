@@ -5,6 +5,16 @@ var autosave;
 /* One-time costs */
 var retainManaLayerCost = 10;
 var automageCost = 25;
+var nextHint = [
+	"Next Upgrade Unlocked at 5 Mana",
+	"Next Upgrade Unlocked at 10 Mana",
+	"Next Layer Unlocked at 10 Mages",
+	"Next Upgrade Unlocked at 2 Blood",
+	"Next Upgrade Unlocked at 4 Blood",
+	"Next Upgrade Unlocked at 10 Blood",
+	"Next Upgrade Unlocked at 25 Blood",
+	"Congrats, You've Reached the Current End of the Game!"
+]
 
 function initialize(){
 	gameData = {
@@ -137,7 +147,36 @@ function activateAutomage(){
 	updateElements();
 }
 
+function getGameStage(){
+	var stage = 0;
+	if(gameData.mana >= 5 || gameData.manaPower > 1){
+		stage = 1;
+	}
+	if(gameData.mana >= 10 || gameData.mages > 0){
+		stage = 2;
+	}
+	if(gameData.mages >= 10 || gameData.bloodUnlocked == true){
+		stage = 3;
+	}
+	if(gameData.blood >= 2 || gameData.manaPowerMulti > 1){
+		stage = 4;
+	}
+	if(gameData.blood >= 4 || gameData.bloodMulti > 1){
+		stage = 5;
+	}
+	if(gameData.blood >= retainManaLayerCost || gameData.retainManaLayer == true){
+		stage = 6;
+	}
+	if(gameData.blood >= automageCost || gameData.automage == true){
+		stage = 7;
+	}
+	
+	return stage;
+}
+
 function updateElements(){
+	document.getElementById("gameHint").innerHTML = nextHint[getGameStage()];
+	
 	document.getElementById("mProduceTitle").innerHTML = "Produce " + toSciNotation(gameData.manaPower*gameData.manaPowerMulti) + " Mana";
 	document.getElementById("powerTitle").innerHTML = "Increase Mana Power | "+toSciNotation(powerCost())+" Mana";
 	document.getElementById("powerDesc").innerHTML = "Infuse yourself with mana to produce more at once. Currently at "+toSciNotation(gameData.manaPower)+" Mana Power.";
@@ -180,7 +219,7 @@ function updateElements(){
 		document.getElementById("powerButton").style.display = "none";
 	}
 	
-	if(gameData.mana >= 100 || gameData.mages > 0){
+	if(gameData.mana >= 10 || gameData.mages > 0){
 		document.getElementById("mageButton").style.display = "block";
 	} else{
 		document.getElementById("mageButton").style.display = "none";
