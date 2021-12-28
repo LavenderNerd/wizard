@@ -1,45 +1,164 @@
+/* Changes global settings */
 html{
 	background-color : black;
 }
 
+/* Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	/*background-color: rgb(0,0,0); /* Fallback color */
+	/*background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	position: relative;
+	color: white;
+	text-align: center;
+	background-color: rgb(50,50,50);
+	margin: auto;
+	padding: 20px;
+	border: 1px solid white;
+	width: 60%;
+	-webkit-animation-name: animatetop;
+	-webkit-animation-duration: 0.4s;
+	animation-name: animatetop;
+	animation-duration: 0.4s;
+}
+
+/* Modal Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Drop-down Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* Button Title */
+.bTitle{
+	display:block;
+	font-size: 16px
+}
+
+/* Button Description */
+.bDesc {
+	display: block;
+	font-size: 10px;
+}
+
+/* Game Title */
 .title{
 	color: white;
 	text-align: center;
 }
 
+/* Version Number */
 .versionNum{
 	color: white;
 	float: right;
 	margin: auto;
 }
 
-p.thick{
+.redText{
+	color: red;
+}
+
+/* Thick Font */
+.thick{
 	font-weight: bold;
 }
 
+/* Default Button */
 button {
   background-color: #4CAF50; /* Green */
+  background-image: linear-gradient(#4CAF50,green);
   border: 1px solid black;
   color: white;
   padding: 4px 4px;
   text-align: center;
+  border-radius: 8px;
   text-decoration: none;
-  display: inline-block;
+  display: block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: auto;
+  margin-top: 2px;
+  margin-bottom: 2px;
   cursor: pointer;
+  opacity: 0.75;
+  transition-duration: 0.4s;
 }
 
+/* Button Hover Animation */
+button:hover{
+	opacity: 1;
+}
+
+/* File Button (Save, Load, etc.) */
 .fileButton{
+	border-radius: 0px;
 	background-color: gray;
+	background-image: none;
+	display: inline-block;
+	border: 1px solid white;
 }
 
-#manaBlock{
-	color: white;
+/* Button in Blood Layer */
+.bloodButton{
+	background-color: yellow;
+	background-image: linear-gradient(yellow,orange);
+	color: black;
+}
+
+/* Default container for resource layers */
+.resourceBlock{
+	color: black;
 	margin: auto;
 	text-align: center;
-	background-color: purple;
-	width: 20%;
-	border: 3px dashed violet;
+	background-color: gray;
+	background-image: radial-gradient(white,gray);
+	width: 30%;
+	border: 3px dashed white;
 	padding: 10px;
+}
+
+/* Mana layer container */
+#manaBlock{
+	color: white;
+	background-color: purple;
+	background-image: radial-gradient(violet,purple);
+	border: 3px dashed violet;
+}
+
+/* Blood layer container */
+#bloodBlock{
+	color: white;
+	background-color: maroon;
+	background-image: radial-gradient(crimson,maroon);
+	border: 3px dashed crimson;
 }

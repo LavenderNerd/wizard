@@ -1,28 +1,76 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-	<link href="style.css" rel="stylesheet">
-    <title>Wizard Incremental</title>
-  </head>
-  <script src="main.js" charset="utf-8" type="text/javascript">
-  </script>
-  <body>
+	<head>
+		<meta charset="utf-8">
+		<link href="style.css" rel="stylesheet">
+		<title>Wizard Incremental</title>
+	</head>
+	<script src="main.js" charset="utf-8" type="text/javascript">
+	</script>
+	<body>
+	
 	<div id="fileBlock"> 
-		<button class="fileButton" onclick="save()">Save</button>
-		<button class="fileButton"onclick="load()">Load</button>
-		<button class="fileButton" onclick="hardReset()">HARD RESET</button>
-		<a class="versionNum">Wizard Incremental v0.1</a>
+		<button class="fileButton" onclick="openOptions()">Options</button>
+		<a class="versionNum">Wizard Incremental v0.2 - <span class="redText">The Blood Update</span></a>
 	</div>
 	
 	<h1 class="title thick">- WIZARD INCREMENTAL -</h1>
-	
-	<div id="manaBlock">
-		<p class="thick" id="manaAmount">0 Current Mana</p>
-		<button id="manaButton" onclick="produceMana()">Produce 1 Mana</button>
-		<div id="manaPower"><button id="powerButton" onclick="increasePower()">Increase Mana Power (5 Mana)</button></div>
-		<div id="mages"><button id="mageButton" onclick="hireMage()">Hire Mage (100 Mana)</button><a id="mageAmount"> 0 Hired</a></div>
+	<div class="resourceBlock" id="manaBlock">
+		<p class="thick" id="manaAmount"></p>
+		<button id="manaButton" onclick="produceMana()">
+			<span class="bTitle" id="mProduceTitle"></span>
+		</button>
+		<button id="powerButton" onclick="increasePower()">
+			<span class="bTitle" id="powerTitle"></span>
+			<span class="bDesc" id="powerDesc">Infuse yourself with mana to produce more at once.</span>
+		</button>
+		<button id="mageButton" onclick="hireMage()">
+			<span class="bTitle" id="mageTitle"></span>
+			<span class="bDesc" id="mageDesc"></span>
+		</button>
 	</div>
 	
-  </body>
+	<div class="resourceBlock" id="bloodBlock">
+		<p class="thick" id="bloodAmount">0 Blood</p>
+		<button class="bloodButton" id="sacrificeButton" onclick="sacrifice()">
+			<span class="bTitle">Initiate a Blood Sacrifice</span>
+			<span class="bDesc" id="sacrificeDesc"></span>
+		</button>
+		<button class="bloodButton" id="powerCheapButton" onclick="powerCostDecrease()">
+			<span class="bTitle" id="powerCheapTitle"></span>
+			<span class="bDesc" id="powerCheapDesc"></span>
+		</button>
+		<button class="bloodButton" id="powerMultiButton" onclick="powerMultiplier()">
+			<span class="bTitle" id="powerMultiTitle"></span>
+			<span class="bDesc" id="powerMultiDesc"></span>
+		</button>
+		<button class="bloodButton" id="bloodMultiButton" onclick="bloodMultiplier()">
+			<span class="bTitle" id="bloodMultiTitle"></span>
+			<span class="bDesc" id="bloodMultiDesc"></span>
+		</button>
+		<button class="bloodButton" id="retainManaButton" onclick="retainMana()">
+			<span class="bTitle" id="retainManaTitle"></span>
+			<span class="bDesc" id="retainManaDesc"></span>
+		</button>
+		<button class="bloodButton" id="automageButton" onclick="activateAutomage()">
+			<span class="bTitle" id="automageTitle"></span>
+			<span class="bDesc" id="automageDesc"></span>
+		</button>
+	</div>
+	
+	<div id="optionsMenu" class="modal">
+		<div class="modal-content">
+			<span class="close" onclick="closeOptions()">&times;</span>
+			<h1>Options</h1>
+			<button class="fileButton" onclick="save()">Save</button>
+			<button class="fileButton"onclick="load()">Load</button>
+			<button class="fileButton" onclick="hardReset()">HARD RESET</button>
+			<div>
+				<input type="checkbox" id="autosave" name="autosave" checked>
+				<label for="autosave">Autosave</label>
+			</div>
+		</div>
+	</div>
+	
+	</body>
 </html>
