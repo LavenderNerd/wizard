@@ -1,10 +1,15 @@
 var gameData;
 var options;
 var autosave;
+var pInterval;
+
+var buyMax = false;
 
 /* One-time costs */
 var retainManaLayerCost = 10;
 var automageCost = 25;
+
+/* Progression Hints */
 var nextHint = [
 	"Next Upgrade Unlocked at 5 Mana",
 	"Next Upgrade Unlocked at 10 Mana",
@@ -18,6 +23,7 @@ var nextHint = [
 
 function initialize(){
 	gameData = {
+		version: "0.2.2",
 		mana: 0,
 		manaPower: 1,
 		manaPowerBase: 10,
@@ -39,7 +45,20 @@ function save(){
 function load(){
 	var savegame = JSON.parse(localStorage.getItem("wizIncSave"))
 	if (savegame !== null) {
-		gameData = savegame;
+		if(typeof savegame.version === "undefined" || savegame.version != gameData.version){
+			if (typeof savegame.mana !== "undefined"){ gameData.mana = savegame.mana; }
+			if (typeof savegame.manaPower !== "undefined"){ gameData.manaPower = savegame.manaPower; }
+			if (typeof savegame.manaPowerBase !== "undefined"){ gameData.manaPowerBase = savegame.manaPowerBase; }
+			if (typeof savegame.manaPowerMulti !== "undefined"){ gameData.manaPowerMulti = savegame.manaPowerMulti; }
+			if (typeof savegame.mages !== "undefined"){ gameData.mages = savegame.mages; }
+			if (typeof savegame.automage !== "undefined"){ gameData.automage = savegame.automage; }
+			if (typeof savegame.retainManaLayer !== "undefined"){ gameData.retainManaLayer = savegame.retainManaLayer; }
+			if (typeof savegame.blood !== "undefined"){ gameData.blood = savegame.blood; }
+			if (typeof savegame.bloodMulti !== "undefined"){ gameData.bloodMulti = savegame.bloodMulti; }
+			if (typeof savegame.bloodUnlocked !== "undefined"){ gameData.bloodUnlocked = savegame.bloodUnlocked; }
+		} else{
+			gameData = savegame;
+		}
 	}
 	updateElements();
 }
@@ -62,16 +81,40 @@ function powerCost(){
 	return cost;
 }
 function mageCost(){
-	var cost = (gameData.mages+1)*10;
+	var cost = 10+Math.floor(Math.pow(1.7,gameData.mages))-1;
 	return cost;
 }
 function bloodGain(){
 	var gain = 0
 	if(gameData.mages >= 10){
-		gain = Math.log(gameData.mages)/Math.log(10)*gameData.bloodMulti;
+		//gain = Math.log(gameData.mages)/Math.log(10)*gameData.bloodMulti;
+		gain = (gameData.mages/10)*gameData.bloodMulti;
 	}
 	return roundToDecimal(gain,2);
 }
+function powerCheapCost(){
+	var cost = Math.pow(2,10-gameData.manaPowerBase);
+	return cost;
+}
+function powerMultiCost(){
+	var cost = Math.pow(2,gameData.manaPowerMulti);
+	return cost;
+}
+function bloodMultiCost(){
+	var cost = Math.pow(2,gameData.bloodMulti+1);
+	return cost;
+}
+
+/* Holding mouse on Produce Mana */
+function startProduce() {
+    pInterval = setInterval(function() {
+		produceMana();
+    }, 250);
+}
+function endProduce(){
+	clearInterval(pInterval);
+}
+
 
 /* Upgrades! */
 function produceMana(){
@@ -82,6 +125,7 @@ function increasePower(){
 	if(gameData.mana >= powerCost()){
 		gameData.mana -= powerCost();
 		gameData.manaPower += 1;
+		if(buyMax == true){ increasePower(); }
 	}
 	updateElements();
 }
@@ -90,6 +134,7 @@ function hireMage(){
 	if(gameData.mana >= mageCost()){
 		gameData.mana -= mageCost();
 		gameData.mages += 1;
+		if(buyMax == true){ hireMage(); }
 	}
 	updateElements();
 }
@@ -108,25 +153,28 @@ function sacrifice(){
 }
 
 function powerCostDecrease(){
-	if(gameData.blood >= exponentialCost(10-gameData.manaPowerBase) && gameData.manaPowerBase>2){
-		gameData.blood -= exponentialCost(10-gameData.manaPowerBase);
+	if(gameData.blood >= powerCheapCost() && gameData.manaPowerBase>2){
+		gameData.blood -= powerCheapCost();
 		gameData.manaPowerBase -= 1;
+		if(buyMax == true){ powerCostDecrease(); }
 	}
 	updateElements();
 }
 
 function powerMultiplier(){
-	if(gameData.blood >= exponentialCost(gameData.manaPowerMulti)){
-		gameData.blood -= exponentialCost(gameData.manaPowerMulti);
+	if(gameData.blood >= powerMultiCost()){
+		gameData.blood -= powerMultiCost();
 		gameData.manaPowerMulti += 1;
+		if(buyMax == true){ powerMultiplier(); }
 	}
 	updateElements();
 }
 
 function bloodMultiplier(){
-	if(gameData.blood >= exponentialCost(gameData.bloodMulti+1)){
-		gameData.blood -= exponentialCost(gameData.bloodMulti+1);
+	if(gameData.blood >= bloodMultiCost()){
+		gameData.blood -= bloodMultiCost();
 		gameData.bloodMulti += 1;
+		if(buyMax == true){ bloodMultiplier(); }
 	}
 	updateElements();
 }
@@ -147,6 +195,7 @@ function activateAutomage(){
 	updateElements();
 }
 
+/* Get the game stage to show progression hints */
 function getGameStage(){
 	var stage = 0;
 	if(gameData.mana >= 5 || gameData.manaPower > 1){
@@ -179,8 +228,8 @@ function updateElements(){
 	
 	document.getElementById("mProduceTitle").innerHTML = "Produce " + toSciNotation(gameData.manaPower*gameData.manaPowerMulti) + " Mana";
 	document.getElementById("powerTitle").innerHTML = "Increase Mana Power | "+toSciNotation(powerCost())+" Mana";
-	document.getElementById("powerDesc").innerHTML = "Infuse yourself with mana to produce more at once. Currently at "+toSciNotation(gameData.manaPower)+" Mana Power.";
-	document.getElementById("mageDesc").innerHTML = "Hire a mage to produce mana for you. "+toSciNotation(gameData.mages) + " Hired.";
+	document.getElementById("powerDesc").innerHTML = "Infuse yourself with Mana to produce more at once. Currently at "+toSciNotation(gameData.manaPower)+" Mana Power.";
+	document.getElementById("mageDesc").innerHTML = "Hire a Mage to produce Mana for you. "+toSciNotation(gameData.mages) + " Hired.";
 	document.getElementById("mageTitle").innerHTML = "Hire Mage | "+toSciNotation(mageCost())+" Mana";
 	if(gameData.mages > 0){
 		document.getElementById("manaAmount").innerHTML = toSciNotation(gameData.mana) + " Mana ("+toSciNotation(gameData.mages*gameData.manaPower*gameData.manaPowerMulti)+"/s)";
@@ -188,80 +237,83 @@ function updateElements(){
 		document.getElementById("manaAmount").innerHTML = toSciNotation(gameData.mana) + " Mana";
 	}
 	document.getElementById("bloodAmount").innerHTML = toSciNotation(gameData.blood) + " Blood";
-	document.getElementById("sacrificeDesc").innerHTML = "Sacrifice all Mana, Power, and Mages for "+toSciNotation(bloodGain())+" Blood.";
+	document.getElementById("sacrificeDesc").innerHTML = "Sacrifice all Mana, Power, and Mages for "+toSciNotation(bloodGain())+" Blood.<br />Blood gain is equal to one tenth of owned Mages.";
 	if(gameData.manaPowerBase == 2){
 		document.getElementById("powerCheapTitle").innerHTML = "Cheaper Mana Power Upgrade | MAXED";
 	} else{
-		document.getElementById("powerCheapTitle").innerHTML = "Cheaper Mana Power Upgrade | "+toSciNotation(exponentialCost(10-gameData.manaPowerBase))+" Blood";
+		document.getElementById("powerCheapTitle").innerHTML = "Cheaper Mana Power Upgrade | "+toSciNotation(powerCheapCost())+" Blood";
 	}
-	document.getElementById("powerCheapDesc").innerHTML = "Decrease the base cost of the mana power upgrade. Current base: "+gameData.manaPowerBase;
-	document.getElementById("powerMultiTitle").innerHTML = "Multiply Mana Power Upgrade | "+toSciNotation(exponentialCost(gameData.manaPowerMulti))+" Blood";
-	document.getElementById("powerMultiDesc").innerHTML = "Add a multiplier to the mana power upgrade. Current Multi: x"+toSciNotation(gameData.manaPowerMulti);
-	document.getElementById("bloodMultiTitle").innerHTML = "Multiply Blood Gain | "+toSciNotation(exponentialCost(gameData.bloodMulti+1))+" Blood";
-	document.getElementById("bloodMultiDesc").innerHTML = "Add a multiplier to blood gain on sacrifice. Current Multi: x"+toSciNotation(gameData.bloodMulti);
+	document.getElementById("powerCheapDesc").innerHTML = "Decrease the base cost of the Mana Power upgrade. Current base: "+gameData.manaPowerBase;
+	document.getElementById("powerMultiTitle").innerHTML = "Multiply Mana Power Upgrade | "+toSciNotation(powerMultiCost())+" Blood";
+	document.getElementById("powerMultiDesc").innerHTML = "Add a multiplier to the Mana Power upgrade. Current Multi: x"+toSciNotation(gameData.manaPowerMulti);
+	document.getElementById("bloodMultiTitle").innerHTML = "Multiply Blood Gain | "+toSciNotation(bloodMultiCost())+" Blood";
+	document.getElementById("bloodMultiDesc").innerHTML = "Add a multiplier to Blood gain on sacrifice. Current Multi: x"+toSciNotation(gameData.bloodMulti);
 	if(gameData.retainManaLayer == true){
 		document.getElementById("retainManaTitle").innerHTML = "Retain Mana Layer | BOUGHT";
 	} else{
-		document.getElementById("retainManaTitle").innerHTML = "Retain Mana Layer | "+toSciNotation(retainManaLayerCost)+" Blood";
+		document.getElementById("retainManaTitle").innerHTML = "Retain Mana Layer on Sacrifice | "+toSciNotation(retainManaLayerCost)+" Blood";
 	}
-	document.getElementById("retainManaDesc").innerHTML = "Retain everything in the mana layer on sacrifice.";
+	document.getElementById("retainManaDesc").innerHTML = "Retain Mana, Power, and Mages when sacrificing for Blood.";
 	if(gameData.automage == true){
 		document.getElementById("automageTitle").innerHTML = "Auto-Mage | BOUGHT";
 	} else{
 		document.getElementById("automageTitle").innerHTML = "Auto-Mage | "+toSciNotation(automageCost)+" Blood";
 	}
-	document.getElementById("automageDesc").innerHTML = "Automatically hires mages for you if you can afford them.";
+	document.getElementById("automageDesc").innerHTML = "Automatically hires Mages for you if you can afford them.";
+	
+	//Buy Max Highlighting
+	if(buyMax == true){
+		document.getElementById("buyOneButton").style.opacity = 0.5;
+		document.getElementById("buyMaxButton").style.opacity = 1;
+	} else{
+		document.getElementById("buyOneButton").style.opacity = 1;
+		document.getElementById("buyMaxButton").style.opacity = 0.5;
+	}
 	
 	//Hide elements for progression
-	if(gameData.mana >= 5 || gameData.manaPower > 1){
-		document.getElementById("powerButton").style.display = "block";
-	} else{
-		document.getElementById("powerButton").style.display = "none";
-	}
+	showElement(gameData.mana >= 5 || gameData.manaPower > 1,"powerButton");
+	showElement(gameData.mana >= 10 || gameData.mages > 0,"mageButton");
+	showElement(gameData.mages >= 10 || gameData.bloodUnlocked == true,"bloodBlock");
+	showElement(gameData.blood >= 2 || gameData.manaPowerMulti > 1,"powerMultiButton");
+	showElement(gameData.blood >= 4 || gameData.bloodMulti > 1,"bloodMultiButton");
+	showElement(gameData.blood >= retainManaLayerCost || gameData.retainManaLayer == true,"retainManaButton");
+	showElement(gameData.blood >= automageCost || gameData.automage == true,"automageButton");
 	
-	if(gameData.mana >= 10 || gameData.mages > 0){
-		document.getElementById("mageButton").style.display = "block";
+	//Fade Upgrades Out if you can't buy them
+	fadeButton(gameData.mana,powerCost(),"powerButton");
+	fadeButton(gameData.mana,mageCost(),"mageButton");
+	fadeButton(bloodGain(),1,"sacrificeButton");
+	fadeButton(gameData.blood,powerCheapCost(),"powerCheapButton");
+	fadeButton(gameData.blood,powerMultiCost(),"powerMultiButton");
+	fadeButton(gameData.blood,bloodMultiCost(),"bloodMultiButton");
+	fadeButton(gameData.blood,retainManaLayerCost,"retainManaButton");
+	fadeButton(gameData.blood,automageCost,"automageButton");
+}
+
+function showElement(condition,element){
+	if(condition){
+		document.getElementById(element).style.display = "block";
 	} else{
-		document.getElementById("mageButton").style.display = "none";
-	}
-	
-	if(gameData.mages >= 10 || gameData.bloodUnlocked == true){
-		document.getElementById("bloodBlock").style.display = "block";
-	} else{
-		document.getElementById("bloodBlock").style.display = "none";
-	}
-	
-	if(gameData.blood >= 2 || gameData.manaPowerMulti > 1){
-		document.getElementById("powerMultiButton").style.display = "block";
-	} else{
-		document.getElementById("powerMultiButton").style.display = "none";
-	}
-	
-	if(gameData.blood >= 4 || gameData.bloodMulti > 1){
-		document.getElementById("bloodMultiButton").style.display = "block";
-	} else{
-		document.getElementById("bloodMultiButton").style.display = "none";
-	}
-	
-	if(gameData.blood >= retainManaLayerCost || gameData.retainManaLayer == true){
-		document.getElementById("retainManaButton").style.display = "block";
-	} else{
-		document.getElementById("retainManaButton").style.display = "none";
-	}
-	
-	if(gameData.blood >= automageCost || gameData.automage == true){
-		document.getElementById("automageButton").style.display = "block";
-	} else{
-		document.getElementById("automageButton").style.display = "none";
+		document.getElementById(element).style.display = "none";
 	}
 }
 
-/* Number Display Heler Functions */
-function toSciNotation(num){
-	if(num >= 10000){
-		return num.toExponential(2);
+function fadeButton(resource,price,button){
+	if(resource < price){ 
+		document.getElementById(button).style.opacity = 0.5; 
+		document.getElementById(button).style.cursor = "not-allowed";
+	} else{ 
+		document.getElementById(button).style.opacity = 1; 
+		document.getElementById(button).style.cursor = "pointer"; 
 	}
-	return roundToDecimal(num,2);
+}
+
+/* Number Display Helper Functions */
+function toSciNotation(num){
+	if(num >= Math.pow(10,6)){
+		return num.toExponential(2).replace('+','');
+	}
+	return Intl.NumberFormat('en-US').format(roundToDecimal(num,2));
 }
 function roundToDecimal(num,decimals){
 	var result = Math.round((num + Number.EPSILON) * Math.pow(10,decimals)) / Math.pow(10,decimals);

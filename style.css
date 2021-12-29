@@ -85,8 +85,8 @@ html{
 	margin: auto;
 }
 
-.redText{
-	color: red;
+.updateName{
+	color: lightblue;
 }
 
 /* Thick Font */
@@ -110,14 +110,10 @@ button {
   margin-top: 2px;
   margin-bottom: 2px;
   cursor: pointer;
-  opacity: 0.75;
+  opacity: 1;
   transition-duration: 0.4s;
 }
 
-/* Button Hover Animation */
-button:hover{
-	opacity: 1;
-}
 
 /* File Button (Save, Load, etc.) */
 .fileButton{
@@ -126,6 +122,18 @@ button:hover{
 	background-image: none;
 	display: inline-block;
 	border: 1px solid white;
+}
+
+.buyAmounts{
+	text-align: center;
+	margin-bottom: 2px
+}
+
+.buyButton{
+	display: inline-block;
+	background-color: white;
+	background-image: linear-gradient(#454545,black);
+	border: 1px solid lightgray;
 }
 
 /* Button in Blood Layer */
@@ -145,6 +153,11 @@ button:hover{
 	width: 30%;
 	border: 3px dashed white;
 	padding: 10px;
+}
+
+#gameHint{
+	color: lightgray;
+	text-decoration: underline dotted white;
 }
 
 /* Mana layer container */

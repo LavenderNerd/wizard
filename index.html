@@ -11,14 +11,21 @@
 	
 	<div id="fileBlock"> 
 		<button class="fileButton" onclick="openOptions()">Options</button>
-		<a class="versionNum">Wizard Incremental v0.2.1 - <span class="redText thick">The Blood Update</span></a>
+		<a class="versionNum">Wizard Incremental v0.2.2 - <span class="updateName thick">Balance Update</span></a>
 	</div>
 	
 	<h1 class="title thick">- WIZARD INCREMENTAL -</h1>
-	<h3 class="title thick" id="gameHint">Testing</h3>
+	<div class="hintBox"><h3 class="title thick" id="gameHint"></h3>
+	<h5 class="title thick">HINT: You can hold the mouse down to produce mana faster.</h5>
+	
+	<div class="buyAmounts">
+		<button class="buyButton" id="buyOneButton" onclick="buyMax = false; updateElements();">Buy x1</button>
+		<button class="buyButton" id="buyMaxButton" onclick="buyMax = true; updateElements();">Buy Max</button>
+	</div>
+	
 	<div class="resourceBlock" id="manaBlock">
 		<p class="thick" id="manaAmount"></p>
-		<button id="manaButton" onclick="produceMana()">
+		<button id="manaButton" onclick="produceMana()" onmousedown="startProduce()" onmouseup="endProduce()" onmouseleave="endProduce()">
 			<span class="bTitle" id="mProduceTitle"></span>
 		</button>
 		<button id="powerButton" onclick="increasePower()">
@@ -64,8 +71,9 @@
 			<span class="close" onclick="closeOptions()">&times;</span>
 			<h1>Options</h1>
 			<button class="fileButton" onclick="save()">Save</button>
-			<button class="fileButton"onclick="load()">Load</button>
+			<button class="fileButton" onclick="load()">Load</button>
 			<button class="fileButton" onclick="hardReset()">HARD RESET</button>
+			<button class="fileButton" onclick="window.open('./changelog.txt')">Changelog</button>
 			<div>
 				<input type="checkbox" id="autosave" name="autosave" checked>
 				<label for="autosave">Autosave</label>

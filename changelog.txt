@@ -1,7 +1,13 @@
+v0.2.2 - Balance Update
+-More cost balancing
+-Save compatibility between versions (No more NaN hopefully!)
+-Upgrades fade out when you can't purchase them
+-Added a buy max button
+
 v0.2.1
 -Mages cost less now
 -Added goals for next feature
--Added version history
+-Added changelog
 
 v0.2 - The Blood Update
 -Added Blood Layer
