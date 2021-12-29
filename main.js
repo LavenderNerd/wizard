@@ -243,7 +243,7 @@ function updateElements(){
 	} else{
 		document.getElementById("powerCheapTitle").innerHTML = "Cheaper Mana Power Upgrade | "+toSciNotation(powerCheapCost())+" Blood";
 	}
-	document.getElementById("powerCheapDesc").innerHTML = "Decrease the base cost of the Mana Power upgrade. Current base: "+gameData.manaPowerBase;
+	document.getElementById("powerCheapDesc").innerHTML = "Decrease the base cost of the Mana Power upgrade. Current: ("+gameData.manaPowerBase+"^(x-1))*5";
 	document.getElementById("powerMultiTitle").innerHTML = "Multiply Mana Power Upgrade | "+toSciNotation(powerMultiCost())+" Blood";
 	document.getElementById("powerMultiDesc").innerHTML = "Add a multiplier to the Mana Power upgrade. Current Multi: x"+toSciNotation(gameData.manaPowerMulti);
 	document.getElementById("bloodMultiTitle").innerHTML = "Multiply Blood Gain | "+toSciNotation(bloodMultiCost())+" Blood";
