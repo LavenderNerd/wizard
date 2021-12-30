@@ -280,14 +280,14 @@ function updateElements(){
 	showElement(gameData.blood >= automageCost || gameData.automage == true,"automageButton");
 	
 	//Fade Upgrades Out if you can't buy them
-	fadeButton(gameData.mana,powerCost(),"powerButton");
-	fadeButton(gameData.mana,mageCost(),"mageButton");
-	fadeButton(bloodGain(),1,"sacrificeButton");
-	fadeButton(gameData.blood,powerCheapCost(),"powerCheapButton");
-	fadeButton(gameData.blood,powerMultiCost(),"powerMultiButton");
-	fadeButton(gameData.blood,bloodMultiCost(),"bloodMultiButton");
-	fadeButton(gameData.blood,retainManaLayerCost,"retainManaButton");
-	fadeButton(gameData.blood,automageCost,"automageButton");
+	fadeButton(gameData.mana,powerCost(),"powerButton",false);
+	fadeButton(gameData.mana,mageCost(),"mageButton",false);
+	fadeButton(bloodGain(),1,"sacrificeButton",false);
+	fadeButton(gameData.blood,powerCheapCost(),"powerCheapButton",false);
+	fadeButton(gameData.blood,powerMultiCost(),"powerMultiButton",false);
+	fadeButton(gameData.blood,bloodMultiCost(),"bloodMultiButton",false);
+	fadeButton(gameData.blood,retainManaLayerCost,"retainManaButton",gameData.retainManaLayer);
+	fadeButton(gameData.blood,automageCost,"automageButton",gameData.automage);
 }
 
 function showElement(condition,element){
@@ -298,8 +298,8 @@ function showElement(condition,element){
 	}
 }
 
-function fadeButton(resource,price,button){
-	if(resource < price){ 
+function fadeButton(resource,price,button,override){
+	if(resource < price || override){ 
 		document.getElementById(button).style.opacity = 0.5; 
 		document.getElementById(button).style.cursor = "not-allowed";
 	} else{ 
