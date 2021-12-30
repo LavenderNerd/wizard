@@ -3,6 +3,7 @@ v0.2.2 - Balance Update
 -Save compatibility between versions (No more NaN hopefully!)
 -Upgrades fade out when you can't purchase them
 -Added a buy max button
+-HOTFIX: Fixed upgrades appearing as buyable when you max them out
 
 v0.2.1
 -Mages cost less now
