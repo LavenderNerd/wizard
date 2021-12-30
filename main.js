@@ -283,7 +283,7 @@ function updateElements(){
 	fadeButton(gameData.mana,powerCost(),"powerButton",false);
 	fadeButton(gameData.mana,mageCost(),"mageButton",false);
 	fadeButton(bloodGain(),1,"sacrificeButton",false);
-	fadeButton(gameData.blood,powerCheapCost(),"powerCheapButton",false);
+	fadeButton(gameData.blood,powerCheapCost(),"powerCheapButton",gameData.manaPowerBase == 2);
 	fadeButton(gameData.blood,powerMultiCost(),"powerMultiButton",false);
 	fadeButton(gameData.blood,bloodMultiCost(),"bloodMultiButton",false);
 	fadeButton(gameData.blood,retainManaLayerCost,"retainManaButton",gameData.retainManaLayer);
